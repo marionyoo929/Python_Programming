@@ -1,8 +1,11 @@
 {
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   },
-  "code-runner.saveFileBeforeRun" : true,
-  "code-runner.runInTerminal": true
+  "code-runner.saveFileBeforeRun": true,
+  "code-runner.runInTerminal": true,
+  "files.trimTrailingWhitespace": false,
+  "files.insertFinalNewline": false,
+  "editor.formatOnSave": false
 }
