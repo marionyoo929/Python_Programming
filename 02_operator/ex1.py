@@ -7,7 +7,7 @@ b = 3
 print(a + b)
 print(a - b)
 print(a * b)
-print(a / b)
+print(a / b)  # Float형 - Python에서 나누기는 무조건 float형이 됨
 print(a % b)  # 나머지
 print(a // b) # 몫
 print(a ** b) # 거듭 제곱
