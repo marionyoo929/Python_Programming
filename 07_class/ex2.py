@@ -2,12 +2,12 @@
 
 # ===========================================================
 #  1. 상속이란?
-#  - (  )의 속성과 메소드를 (  )가 물려받는 것
+#  - ( 부모 클래스 )의 속성과 메소드를 ( 자식 클래스 )가 물려받는 것
 #
 #  - 부모 클래스 = 상위 클래스 = 슈퍼 클래스 = 기반 클래스
 #  - 자식 클래스 = 하위 클래스 = 서브 클래스 = 파생 클래스
 #
-#  - 관계 표현: (  )
+#  - 관계 표현: ( is-a 관계 )
 #    예) 강아지는 동물이다 (Dog is-a Animal)
 #        학생은 사람이다 (Student is-a Person)
 # ===========================================================
@@ -17,18 +17,37 @@
 #  2. 상속이 필요한 이유
 # ===========================================================
 
-
-
+class Dog:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+        
+    def eat(self):
+        print(f"{self.name}이 밥을 먹는다.")
+        
+    def bark(self):
+        print(f"{self.name}: 멍멍")
+        
+class Cat:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+        
+    def eat(self):
+        print(f"{self.name}이 밥을 먹는다.")
+        
+    def meow(self):
+        print(f"{self.name}: 야옹")
 
 # 위 코드의 문제점은?
-# - (  ) -> 유지 보수가 어려워짐
+# - ( 중복코드 ) -> 유지 보수가 어려워짐
 # - 공통 부분은 부모 클래스에 한 번만 작성하고, 자식들이 물려받자!
 
 # ===========================================================
 #  상속의 장점
-#  - (  ) : 공통 코드를 부모에 한 번만 작성
-#  - (  ) : 부모만 고치면 모든 자식에 반영됨
-#  - (  ) : 새로운 자식 클래스를 쉽게 추가할 수 있음
+#  - ( 코드 재사용 ) : 공통 코드를 부모에 한 번만 작성
+#  - ( 유지보수 관리 ) : 부모만 고치면 모든 자식에 반영됨
+#  - ( 확장성 ) : 새로운 자식 클래스를 쉽게 추가할 수 있음
 # ===========================================================
 
 
@@ -38,50 +57,104 @@
 #  - 공통 부분을 Animal 부모 클래스로 분리
 # ===========================================================
 
-
-
-
+class Animal:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+        
+    def eat(self):
+        print(f"{self.name}이 밥을 먹는다.")
+        
+        
 # 부모의 속성/메소드를 그대로 물려받음
 # 자식만의 새로운 속성/메소드 추가 가능
 
+class Dog(Animal):
+    def bark(self):
+        print(f"{self.name}: 멍멍")
+        
+class Cat(Animal):
+    def meow(self):
+        print(f"{self.name}: 야옹")
 
+d = Dog("멍멍이", 5)
+print(d.name, d.age)
+d.eat()
+d.bark()
+
+c = Cat("야옹이", 3)
+print(c.name, c.age)
+c.eat()
+c.meow()
 
 # 어떤 클래스의 객체인지 확인하기
-
+print(isinstance(d, Dog))
+print(isinstance(c, Cat))
+print(isinstance(c, Animal))
 
 # 상속 관계 확인하기
+print(issubclass(Dog, Animal))
+print(issubclass(Cat, Animal))
 
+# 부모 클래스 확인
+print(Dog.__bases__)           # return type : tuple. 다중 상속 가능
 
+print(Animal.__bases__)        # (<class 'object'>,)
 
-# 모든 클래스는 최상위 부모인 (  ) 클래스를 자동으로 상속받는다.
-
-
+# 모든 클래스는 최상위 부모인 ( object ) 클래스를 자동으로 상속받는다.
 
 # ===========================================================
 #  4. super()
-#  - super(): 부모 클래스의 (  )를 호출할 수 있게 해주는 함수 -> super().메소드명()
+#  - super(): 부모 클래스의 ( 메소드 )를 호출할 수 있게 해주는 함수 -> super().메소드명()
 #  - 자식 클래스에서 생성자를 만들면 부모의 생성자를 자동으로 실행하지 않는다.
 #  - 부모의 생성자를 실행하려면 super().__init__()을 직접 호출해야 한다. -> self 넘기지 않음
 # ===========================================================
 
 # 자식 클래스의 생성자에서 부모 클래스의 생성자를 호출하지 않을 경우
-
-
+class Dog(Animal):
+    def __init__(self, name, age, breed):
+        self.breed = breed
+        
+d = Dog("멍멍이", 5, "푸들")
+# print(d.name, d.age, d.breed)          # error (name, age x)
 
 # super()로 부모의 생성자 호출하기
-
-
-
+class Dog(Animal):
+    def __init__(self, name, age, breed):
+        super().__init__(name, age )
+        self.breed = breed
+        
+d = Dog("멍멍이", 3, "푸들")
+print(d.name, d.age, d.breed)
 
 # ===========================================================
 #  5. 메소드 오버라이딩 (Method Overriding)
-#  - 부모 클래스에 있는 메소드를 자식 클래스에서 (  )으로 (  )하는 것
-#  - (  ) 관계에서만 발생하고, 메소드 (  )이 동일해야 한다.
-#  - 오버라이딩된 메소드는 부모 메소드가 아닌 (  )가 실행된다.
+#  - 부모 클래스에 있는 메소드를 자식 클래스에서 ( 같은 이름 )으로 ( 재정의 )하는 것
+#  - ( 상속 ) 관계에서만 발생하고, 메소드 ( 이름 )이 동일해야 한다.
+#  - 오버라이딩된 메소드는 부모 메소드가 아닌 ( 자밋 메소드 )가 실행된다.
 # ===========================================================
 
+class Animal:
+    def __init__(self, name):
+        self.name = name
+        
+    def speak(self):
+        print(f"{self.name}: ...")
 
+class Dog(Animal):
+    def speak(self):                     # 매소드 오버 라이딩
+        print(f"{self.name}: 멍멍")
+        
+class Cat(Animal):
+    def speak(self):                     # 매소드 오버 라이딩
+        print(f"{self.name}: 야옹")
+        
+class Fish(Animal):
+    pass
 
+Dog("멍멍이").speak()
+Cat("야옹이").speak()
+Fish("니모").speak()     # ...
 # 자식 클래스에서 부모 클래스의 메소드를 오버라이딩 시
 # 부모 클래스의 기능이 필요한 경우 super().메소드명()으로 호출
 
