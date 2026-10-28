@@ -121,9 +121,20 @@ def get_weather(lat, lon):
         params = {
             "latitude": lat,
             "longitude": lon,
-            "current": "temperature_2m",
+            "current": ["temperature_2m", "precipitation", "wind_speed_10m"],
+            "timezone": "Asia/Tokyo"
         }
-        
+        response = requests.get(url, params=params, timeout=10)
+                
+        if response.status_code != 200:
+            print(f"요청 실패 (상태 코드 : {response.status_code})")
+            return
+                
+        data = response.json()
+        print(data)
+        # 측정 일시 : 2026-10-228T10:00
+        # 기온 : 5.6°C
+        # 풍속 : 10.2km/h
 
     except requests.exceptions.Timeout as e:
         print(f"서버 응답시간 초과: {e}")
@@ -132,4 +143,4 @@ def get_weather(lat, lon):
     except Exception as e:
         print(f"오류 발생: {e}")
 
-# get_weather(lat=37.3416467, lon=126.8310305)
+get_weather(lat=37.3416467, lon=126.8310305)
